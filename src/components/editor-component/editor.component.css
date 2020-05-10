@@ -1,0 +1,7 @@
+.borderError {
+    border: solid 1px red;
+}
+
+form * {
+    margin-left: 10px;
+}
