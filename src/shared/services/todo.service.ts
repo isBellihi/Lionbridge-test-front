@@ -14,5 +14,8 @@ export function addItem(todo: Todo) {
 }
 
 export function updateItem(todo: Todo) {
-    return Axios.put('https://lionbridge-test-api.herokuapp.com/api/todos/' + todo._id, todo);
+    const id = todo._id;
+    const obj = {...todo};
+    obj._id = undefined;
+    return Axios.put('https://lionbridge-test-api.herokuapp.com/api/todos/' + id, obj);
 }

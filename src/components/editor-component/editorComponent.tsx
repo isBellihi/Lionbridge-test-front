@@ -1,8 +1,8 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import { Todo } from '../../shared/models/todo.model';
 import './editor.component.css';
-import { addItem } from '../../shared/services/todo.service';
+import { updateItem } from '../../shared/services/todo.service';
 import { communicationService } from '../../shared/services/communication.service';
 import * as moment from "moment";
 
@@ -13,7 +13,7 @@ function EditorComponent() {
     const [selectedItem, setSelectedITem] = useState<Todo>({});
 
     useEffect(() => {
-        const subscription = communicationService.onMessage().subscribe((item: any) => {
+        const subscription = communicationService.onEditClick().subscribe((item: any) => {
             if (item) {
                 setSelectedITem(item);
             } else {
@@ -31,17 +31,13 @@ function EditorComponent() {
             dueDate: values.dueDate,
             createdAt: new Date()
         });
-        setSubmitting(false);
-        console.log(selectedItem);
-        return;
-        addItem(values).then(res => {
-            setSelectedITem({
-                ...selectedItem,
-                _id: res.data.id
-            });
-            console.log(selectedItem);
+        updateItem(values).then(res => {
+            if(res.data.id) {
+                communicationService.sendItemUpdatedEvent({...values, _id: res.data.id});
+            }
+            setSelectedITem({});
+            setSubmitting(false);
         });
-        setSubmitting(false);
     }
 
     return (
@@ -78,7 +74,6 @@ function EditorComponent() {
                     </form>
                 )}
             </Formik>
-            {JSON.stringify(selectedItem)}
         </div>
     )
 }

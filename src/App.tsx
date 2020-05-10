@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import EditorComponent from './components/editor-component/editorComponent';
 import ListComponent from './components/list-component/listComponent';
 import './App.css';
-import { communicationService } from './shared/services/communication.service';
-import { Todo } from './shared/models/todo.model';
 
 const App : React.FunctionComponent<{}>  = () => {
 

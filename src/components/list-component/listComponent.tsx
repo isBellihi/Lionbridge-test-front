@@ -8,20 +8,26 @@ import { communicationService } from '../../shared/services/communication.servic
 export default function ListComponent() {
     const [todos, setTodos] = useState<Todo[]>([]);
     useEffect(() => {
+        let todosList : any = [];
         getAllTodos().then(res => {
-            setTodos(res.data.map((item: any) => {
+            todosList = res.data.map((item: any) => {
                 item._id = item._id.$oid;
-                item.dueDate = new Date(item.dueDate.$date);
-                item.createdAt = new Date(item.createdAt.$date)
                 return item;
-            }));
+            });
+            setTodos(todosList);
         });
-        return () => {
-        }
+        const subscription =  communicationService.onItemUpdated().subscribe((updatedItem: any) => {
+            todosList = todosList.map((item: Todo) => {
+                if(item._id === updatedItem._id) item = {...updatedItem};
+                return item;
+            });
+            setTodos(todosList);
+        });
+        return subscription.unsubscribe;
     }, []);
 
     const sendEditEvent = (todo: Todo) => {
-        communicationService.sendMessage(todo);
+        communicationService.sendEditClick(todo);
     }
     
     return (
@@ -29,9 +35,9 @@ export default function ListComponent() {
             {
             todos.map(todo => (
                 <div key={todo._id} className='todo'>
-                        <div className="title"><h4>{todo.title}</h4> </div>
+                        <div className="title"><p><strong>{todo.title}</strong> ({todo.status})</p> </div>
                         <div>
-                            {todo.description} 
+                            {todo.description} ( {todo.dueDate})
                         </div>
                         <div>
                             <button className="editButton" onClick={() => sendEditEvent(todo)}>Edit</button>

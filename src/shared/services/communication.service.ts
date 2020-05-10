@@ -1,10 +1,12 @@
 import { Subject } from 'rxjs';
 import { Todo } from '../models/todo.model';
 
-const subject = new Subject();
+const subjectSend = new Subject();
+const itemUpdated = new Subject();
 
 export const communicationService = {
-    sendMessage: (item : Todo) => subject.next(item),
-    clearMessages: () => subject.next(),
-    onMessage: () => subject.asObservable()
+    sendEditClick: (item : Todo) => subjectSend.next(item),
+    onEditClick: () => subjectSend.asObservable(),
+    sendItemUpdatedEvent: (item : Todo) => itemUpdated.next(item),
+    onItemUpdated: () => itemUpdated.asObservable()
 };
