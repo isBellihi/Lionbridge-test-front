@@ -3,5 +3,37 @@
 }
 
 form * {
+    margin-right: 10px;
+}
+
+.form {
+    margin-left: 10%;
+}
+
+.buttonSubmit {
     margin-left: 10px;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.input-field {
+    border-radius: 5px;
+    height: 20px;
+    width: 150px;
+}
+
+form {
+    display: flex;
+    align-items: start;
+}
+
+.formGroup{
+    display: flex;
+    flex-direction: column;
+}
+
+.error {
+    color: red;
+    font-size: 10px;
 }
